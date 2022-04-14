@@ -1,0 +1,23 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+spec:
+  profile: minimal
+  meshConfig:
+    defaultConfig:
+      proxyMetadata:
+        ISTIO_META_DNS_CAPTURE: "false"
+        ISTIO_META_DNS_AUTO_ALLOCATE: "false"
+      tracing:
+        sampling: 100
+        zipkin:
+          address: jaeger-collector.istio-system.svc:9411
+    outboundTrafficPolicy:
+      mode: ALLOW_ANY
+    enableTracing: true
+    accessLogFile: /dev/stdout
+  values:
+    pilot:
+      traceSampling: 100
+    global:
+      proxy:
+        tracer: "zipkin"
